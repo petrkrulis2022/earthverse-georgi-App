@@ -2,30 +2,80 @@
   "abi": [
     {
       "inputs": [
+        { "internalType": "address", "name": "sender", "type": "address" }
+      ],
+      "name": "AccessContract_NotHaveAccess",
+      "type": "error"
+    },
+    { "inputs": [], "name": "AccessContract_ZeroAddress", "type": "error" },
+    {
+      "inputs": [
         { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
       ],
-      "name": "AlreadyListed",
+      "name": "EarthverseMarketplace_AlreadyListed",
       "type": "error"
     },
     {
       "inputs": [
         { "internalType": "uint256", "name": "itemId", "type": "uint256" }
       ],
-      "name": "ItemDoesntExit",
+      "name": "EarthverseMarketplace_ItemDoesntExit",
       "type": "error"
     },
-    { "inputs": [], "name": "NotOwner", "type": "error" },
+    { "inputs": [], "name": "EarthverseMarketplace_NotOwner", "type": "error" },
     {
       "inputs": [
         { "internalType": "uint256", "name": "itemId", "type": "uint256" },
         { "internalType": "uint256", "name": "price", "type": "uint256" }
       ],
-      "name": "PriceDoNotMet",
+      "name": "EarthverseMarketplace_PriceDoNotMet",
       "type": "error"
     },
-    { "inputs": [], "name": "PriceMustBeAboveZero", "type": "error" },
-    { "inputs": [], "name": "SellerCannotBeBuyer", "type": "error" },
-    { "inputs": [], "name": "ZeroAddress", "type": "error" },
+    {
+      "inputs": [],
+      "name": "EarthverseMarketplace_PriceMustBeAboveZero",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "EarthverseMarketplace_SellerCannotBeBuyer",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "EarthverseMarketplace_ZeroAddress",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Ownable_CallerIsNotPendingOwner",
+      "type": "error"
+    },
+    { "inputs": [], "name": "Ownable_CallerIsNotTheOwner", "type": "error" },
+    {
+      "inputs": [],
+      "name": "Ownable_NewOwnerMustBeADifferentAddressThanTheCurrentOwner",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "oldAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "EarthverseDepositAddressChanged",
+      "type": "event"
+    },
     {
       "anonymous": false,
       "inputs": [
@@ -95,6 +145,25 @@
       "type": "event"
     },
     {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
       "inputs": [
         { "internalType": "address", "name": "buyer", "type": "address" },
         { "internalType": "uint256", "name": "itemId", "type": "uint256" },
@@ -108,6 +177,20 @@
       "name": "buyNFTLand",
       "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claimOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "earthverseDepositAddress",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -147,6 +230,52 @@
         { "internalType": "address", "name": "seller", "type": "address" }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pendingOwner",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bool", "name": "isRenounce", "type": "bool" }
+      ],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_earthverseDepositAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setNewEarthverseDepositAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "newOwner", "type": "address" },
+        { "internalType": "bool", "name": "direct", "type": "bool" }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     }
   ]
