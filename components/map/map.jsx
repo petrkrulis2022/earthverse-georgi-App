@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import CameraPopup from "../CameraPopup";
 import ChosenSquares from "./ChosenSquares";
 import Grid from "./Grid";
-import Header from "../Header";
 import Loading from "../Loading";
+import SearchIcon from "../../svg/components/SearchIcon";
 import { useSession } from "next-auth/react";
 import what3words from "@what3words/api";
 
@@ -60,7 +60,6 @@ const Map = () => {
   }, [getUserData, initGetUserData, session]);
 
   useEffect(() => {
-    console.log("chosenSquares", chosenSquares);
     if (hasAccessToLocation || chosenSquares === null) return;
 
     const id = navigator.geolocation.watchPosition(
@@ -131,7 +130,7 @@ const Map = () => {
   if (!hasAccessToLocation || !initialCoords) return <Loading />;
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative">
       <MapContainer
         center={initialCoords}
         zoom={19}
@@ -164,7 +163,7 @@ const Map = () => {
       </MapContainer>
       {!isClaiming && (
         <div
-          className=" z-[400] absolute text-blue-500 text-sm font-bold"
+          className="z-[400] absolute text-blue-500 text-sm font-bold"
           style={{
             top: lineBottom + 15 + "px",
             left: lineRight + 50 + "px",
@@ -174,7 +173,24 @@ const Map = () => {
           My Location
         </div>
       )}
-      <Header words={words} />
+      {words && (
+        <div className="absolute top-20 right-5 z-[401]">
+          <div className="flex">
+            <div className="hidden relative md:block w-[40rem]">
+              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                <SearchIcon />
+                <span className="sr-only">Search icon</span>
+              </div>
+              <input
+                type="text"
+                id="search-navbar"
+                defaultValue={words}
+                className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+          </div>
+        </div>
+      )}
       <div
         style={{
           position: "absolute",

@@ -1,5 +1,7 @@
+import { Configuration, OpenAIApi } from "openai";
 import {
   EARTHVERSE_MARKETPLACE_ADDRESS,
+  NFT_AI_ADDRESS,
   NFT_LAND_ADDRESS,
 } from "../constants/index";
 import React, { useRef, useState } from "react";
@@ -9,6 +11,7 @@ import BlackCameraIcon from "../svg/components/BlackCameraIcon";
 import { Camera } from "react-camera-pro";
 import EarthverseMarketplaceJson from "../contractsData/EarthverseMarketplaceABI.json";
 import Image from "next/image";
+import NFTAugmentedRealityJson from "../contractsData/NFTAugmentedRealityABI.json";
 import NFTLandJson from "../contractsData/NFTLandABI.json";
 import ReactLoading from "react-loading";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -32,10 +35,17 @@ function CameraPopup({ setIsOpened, chosenSquares, setHasAccessToLocation }) {
   const [price, setPrice] = useState(0);
   const { data: signer } = useSigner();
   const [imageURL, setImageURL] = useState(null);
+  const [textNFTAugmentedReality, setTextNFTAugmentedReality] = useState("");
   const [imageAvatarURL, setImageAvatarURL] = useState(null);
   const [isTakingCameraImg, setIsTakingCameraImg] = useState(false);
   const [isSendingData, setIsSendingData] = useState(false);
   const [isLoadingPopup, setIsLoadingPopup] = useState(false);
+
+  const configuration = new Configuration({
+    apiKey: process.env.NEXT_PUBLIC_VITE_OPEN_AI_KEY,
+  });
+
+  const openai = new OpenAIApi(configuration);
 
   const capture = () => {
     if (!camera.current) return;
@@ -84,12 +94,26 @@ function CameraPopup({ setIsOpened, chosenSquares, setHasAccessToLocation }) {
     setIsLoadingPopup(true);
     const data = fromString(imageURL.slice(23), "base64");
 
+    //Generate NFT Augmented Reality
+    const response = await openai.createImage({
+      prompt: textNFTAugmentedReality,
+      n: 1,
+      size: "1024x1024",
+    });
+
     //STORE TO IPFS
     const ipfs3RandomWordsLink = await storeFileToIPFS(chosenSquares.join(" "));
     const ipfsCameraLink = await storeFileToIPFS(data);
     const ipfsAvatarLink = await storeFileToIPFS(imageAvatarURL);
 
-    const metadataURL = await storeFileToIPFS(
+    const nftAugmentedRealityMetadataURL = await storeFileToIPFS(
+      response.data.data[0].url,
+      true,
+      textNFTAugmentedReality,
+      price
+    );
+
+    const nftLandMetadataURL = await storeFileToIPFS(
       ipfsCameraLink,
       true,
       `NFT Land - ${chosenSquares[chosenSquares?.length - 1]}`,
@@ -108,8 +132,19 @@ function CameraPopup({ setIsOpened, chosenSquares, setHasAccessToLocation }) {
       signer
     );
 
+    const nftAugmentedReality = new ethers.Contract(
+      NFT_AI_ADDRESS,
+      NFTAugmentedRealityJson.abi,
+      signer
+    );
+
+    //Mint NFTAugmentedReality
+    await (
+      await nftAugmentedReality.safeMintNFT(nftAugmentedRealityMetadataURL)
+    ).wait();
+
     //Mint NFTLand
-    const tx = await nftLandContract.safeMintNFT(metadataURL);
+    const tx = await nftLandContract.safeMintNFT(nftLandMetadataURL);
     const rc = await tx.wait();
     const nftLandIdHash = rc.logs[0].topics[3];
     const [nftLandId] = utils.defaultAbiCoder.decode(
@@ -209,10 +244,7 @@ function CameraPopup({ setIsOpened, chosenSquares, setHasAccessToLocation }) {
                 <>
                   <div className="flex py-2 px-3">
                     <h1 className="pl-2 pr-10 py-2">Rate:</h1>
-                    <label
-                      htmlFor="UserEmail"
-                      className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
-                    >
+                    <label className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
                       <input
                         value={price <= 0 ? "" : price}
                         onChange={(e) => {
@@ -289,8 +321,7 @@ function CameraPopup({ setIsOpened, chosenSquares, setHasAccessToLocation }) {
                       <>
                         <label
                           htmlFor="upload-photo"
-                          style={{ cursor: "pointer" }}
-                          className=" group relative inline-flex items-center overflow-hidden rounded bg-indigo-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-indigo-500"
+                          className="cursor-pointer group relative inline-flex items-center overflow-hidden rounded bg-indigo-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-indigo-500"
                         >
                           <span className="absolute right-0 translate-x-full transition-transform group-hover:-translate-x-4">
                             <UploadIcon />
@@ -308,10 +339,37 @@ function CameraPopup({ setIsOpened, chosenSquares, setHasAccessToLocation }) {
                       </>
                     )}
                   </div>
+                  <div className="grid py-2 px-2">
+                    <h1 className="pl-2 pr-10 py-2">Generate your AI NFT:</h1>
+                    <p className="pl-2 py-2">
+                      To generate your AI NFT enter multiple prompt in English
+                      directly or write description of the uploaded picture.
+                      remember words are magic!
+                    </p>
+                    <label className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                      <input
+                        value={textNFTAugmentedReality}
+                        onChange={(e) => {
+                          setTextNFTAugmentedReality(e.target.value);
+                        }}
+                        type="text"
+                        placeholder="Rate"
+                        className="peer h-10 w-[22rem] border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+                      />
+                      <span className="absolute left-3 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
+                        Enter text
+                      </span>
+                    </label>
+                  </div>
 
                   <div className="flex py-3 px-3">
                     <button
-                      disabled={!imageURL || isSendingData || !imageAvatarURL}
+                      disabled={
+                        !imageURL ||
+                        isSendingData ||
+                        !imageAvatarURL ||
+                        textNFTAugmentedReality === ""
+                      }
                       onClick={handleSubmitDialogClick}
                       className="inline-block rounded bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
                     >

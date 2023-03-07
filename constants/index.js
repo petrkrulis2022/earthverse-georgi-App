@@ -1,6 +1,9 @@
 //-- NFT Land --//
 export const NFT_LAND_ADDRESS = "0x8f33C22404fFd115248433c3afDC2a4AFAF023DD";
 
+//-- NFT Augmented Reality --//
+export const NFT_AI_ADDRESS = "0xb3b2a29792fDd2B7762BE76437a2913b7b708b34";
+
 //-- Earthverse Marketplace --//
 export const EARTHVERSE_MARKETPLACE_ADDRESS =
   "0x7e2386E09580d85F7f4Ceb2387a4d5A1764B2257";
