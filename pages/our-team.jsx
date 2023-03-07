@@ -14,6 +14,14 @@ const OurTeam = () => {
             linkedinLink="https://www.linkedin.com/in/georgi-karagyozov-1a33041b0/"
           />
           <TeamCard
+            fullName="Niall McLoughlin"
+            role="Game design, Unity, Thirdweb"
+            srcImg="/images/team/niall-mcLoughlin.jpeg"
+            altImg="Niall McLoughlin"
+            linkedinLink="https://www.linkedin.com/in/niall-mcloughlin-291966a4/"
+            twitterLink="https://twitter.com/neillniall"
+          />
+          <TeamCard
             fullName="Peter Krulis"
             role="Smart Contract Engineer"
             srcImg="/images/team/peter-krulis.jpeg"
