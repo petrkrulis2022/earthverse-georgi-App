@@ -6,8 +6,8 @@ import Link from "next/link";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import MetaMaskIcon from "../svg/components/MetaMaskIcon";
 import WalletConnectIcon from "../svg/components/WalletConnectIcon";
-import axios from "axios";
 import { signIn } from "next-auth/react";
+import { useAuthRequestChallengeEvm } from "@moralisweb3/next";
 import { useRouter } from "next/router";
 
 const ConnectWallet = () => {
@@ -16,6 +16,7 @@ const ConnectWallet = () => {
   const { connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const { signMessageAsync } = useSignMessage();
+  const { requestChallengeAsync } = useAuthRequestChallengeEvm();
 
   const handleAuthClick = async () => {
     if (isConnected) await disconnectAsync();
@@ -24,27 +25,20 @@ const ConnectWallet = () => {
       connector: new MetaMaskConnector(),
     });
 
-    const userData = { address: account, chain: chain.id, network: "evm" };
-
-    const { data } = await axios.post("/api/auth/request-message", userData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const { message } = await requestChallengeAsync({
+      address: account,
+      chainId: chain.id,
     });
 
-    const message = data.message;
     const signature = await signMessageAsync({ message });
 
-    // redirect user after success authentication to '/user' page
-    const { url } = await signIn("credentials", {
+    const { url } = await signIn("moralis-auth", {
       message,
       signature,
       redirect: false,
+      callbackUrl: "/claim-free-land",
     });
-    /**
-     * instead of using signIn(..., redirect: "/user")
-     * we get the url from callback and push it to the router to avoid page refreshing
-     */
+
     push(url);
   };
 
