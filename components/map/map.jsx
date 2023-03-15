@@ -138,8 +138,8 @@ const Map = () => {
         scrollWheelZoom={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+          subdomains={["mt1", "mt2", "mt3"]}
           maxNativeZoom={19}
           minZoom={4}
           maxZoom={21}
@@ -204,7 +204,7 @@ const Map = () => {
       >
         <div className="relative w-[fit-content]">
           <div className="flex p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <div className="py-2 px-2">{chosenSquares.join(" _ ")}</div>
+            <div className="py-2 px-2">{words}</div>
             <div className="flex flex-row-reverse">
               {isClaiming ? (
                 <button
