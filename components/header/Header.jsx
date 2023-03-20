@@ -89,6 +89,10 @@ const Header = () => {
             clickedBtnName={dropDownBtnClicked}
             options={[
               { href: "/virtual-estate-marketplace", name: "Virtual Estate" },
+              {
+                href: "https://testnets.opensea.io/collection/nft-augmented-reality-1",
+                name: "AI NFT Collection",
+              },
             ]}
             handleOptionClick={handleOptionClick}
             handleClickBtn={() => handleClickBtn("Resources")}
