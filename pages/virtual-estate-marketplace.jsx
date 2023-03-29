@@ -87,6 +87,7 @@ const VirtualEstateMarketplace = () => {
         selectedStablecoin,
         ethers.utils.parseUnits(nftLandItem.price.toString(), decimals),
         nftLandItem.id,
+        true,
         decimals
       )
     ).wait();
