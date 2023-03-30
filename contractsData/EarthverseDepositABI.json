@@ -29,12 +29,16 @@
       "name": "EarthverseDeposit_NoRETHWasMinted",
       "type": "error"
     },
-    { "inputs": [], "name": "EarthverseDeposit_NotAdminRole", "type": "error" },
     {
       "inputs": [
         { "internalType": "address", "name": "stablecoin", "type": "address" }
       ],
       "name": "EarthverseDeposit_NotAvailableStablecoinForBuyNFTLand",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "EarthverseDeposit_NotStablecoinAdderRole",
       "type": "error"
     },
     { "inputs": [], "name": "EarthverseDeposit_ZeroAddress", "type": "error" },
@@ -49,44 +53,6 @@
         }
       ],
       "name": "NewStablecoinAddressAdded",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "oldREthAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "newREthAddress",
-          "type": "address"
-        }
-      ],
-      "name": "REthAddressChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "oldRocketPoolDepositAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "newRocketPoolDepositAddress",
-          "type": "address"
-        }
-      ],
-      "name": "RocketPoolDepositAddressChanged",
       "type": "event"
     },
     {
@@ -193,48 +159,17 @@
           "type": "uint256"
         }
       ],
-      "name": "StakedWEthAndReceivedNFTLand",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "sender",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "amountOut",
-          "type": "uint256"
-        }
-      ],
-      "name": "StakedWEthAndSendNFTD",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "oldWEthAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "newWEthAddress",
-          "type": "address"
-        }
-      ],
-      "name": "WEthAddressChanged",
+      "name": "StakedAndReceivedNFTLand",
       "type": "event"
     },
     { "stateMutability": "payable", "type": "fallback" },
+    {
+      "inputs": [],
+      "name": "ADDER_STABLECOIN_ROLE",
+      "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
     {
       "inputs": [],
       "name": "DEFAULT_ADMIN_ROLE",
@@ -246,6 +181,27 @@
       "inputs": [],
       "name": "POOL_FEE",
       "outputs": [{ "internalType": "uint24", "name": "", "type": "uint24" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "RETH",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "ROCKET_POOL_DEPOSIT",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "WETH",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
       "stateMutability": "view",
       "type": "function"
     },
@@ -281,7 +237,6 @@
         { "internalType": "address", "name": "tokenIn", "type": "address" },
         { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
         { "internalType": "uint256", "name": "nftLandId", "type": "uint256" },
-        { "internalType": "bool", "name": "isSendNFTLand", "type": "bool" },
         {
           "internalType": "uint256",
           "name": "decimalsOfInput",
@@ -339,13 +294,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "rEth",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -379,52 +327,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "rocketPoolDeposit",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newREthAddress",
-          "type": "address"
-        }
-      ],
-      "name": "setNewREthAddress",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newRocketPoolDepositAddress",
-          "type": "address"
-        }
-      ],
-      "name": "setNewRocketPoolDepositAddress",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newWEthAddress",
-          "type": "address"
-        }
-      ],
-      "name": "setNewWEthAddress",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [
         { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
       ],
@@ -443,13 +345,6 @@
           "type": "address"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "wEth",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
       "stateMutability": "view",
       "type": "function"
     },
