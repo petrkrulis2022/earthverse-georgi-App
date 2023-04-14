@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const MintNftd = () => {
   return (
@@ -76,6 +77,15 @@ const MintNftd = () => {
           forces and arbitrage incentives are in place to ensure the stability
           of the peg.
         </p>
+      </div>
+
+      <div className="flex justify-center">
+        <Link
+          href=""
+          className="mt-8 inline-block rounded-md bg-indigo-800 text-md py-4 px-10 font-semibold text-white shadow-sm"
+        >
+          MINT rNFTD WITH YOUR STABLECOIN
+        </Link>
       </div>
     </div>
   );

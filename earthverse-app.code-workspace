@@ -4,13 +4,7 @@
       "path": "."
     },
     {
-      "path": "../NFTD-stablecoin"
-    },
-    {
-      "path": "../NFTD-EARTHVERSE/NFTD-stablecoin-app/hashing"
-    },
-    {
-      "path": "../nft_marketplace-main"
+      "path": "../earthverse/earthverse-app-bsc"
     }
   ],
   "settings": {
